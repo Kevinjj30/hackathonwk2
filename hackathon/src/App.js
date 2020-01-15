@@ -10,53 +10,80 @@ class App extends React.Component {
     // initialize the state with empty quotes ''
     this.state = {
     news:[],
-    Search:"",
+    SearchAny:"",
     SearchDate: "",
   }
 }
 
   // a method that, when called, changes the value of this.state.value
-  handleChange(e) {
-    this.setState({value: e.target.value});
+ handleChange = (e) => {
+    this.setState({[e.target.name]: e.target.value})
   }
 
- handleSubmitsearch(e) {
+ handleSubmitsearch =(e) => {
     // always put this line in on submits, it prevents the page from reloading and wiping your state
     e.preventDefault();
-    this.fetchWords(this.state.search)
+    this.fetchany(this.state.SearchAny)
     // after doing something with the data we reset the form value to empty quotes again
     this.setState({value: ''})
   }
 
-  handleSubmitdate(e) {
+  handleSubmitdate =(e) => {
     // always put this line in on submits, it prevents the page from reloading and wiping your state
     e.preventDefault();
-    this.fetchWords(this.state.searchDate)
+    this.fetchdate(this.state.SearchDate)
     // after doing something with the data we reset the form value to empty quotes again
     this.setState({value: ''})
   }
 
+  fetchany = (search) => {
+    fetch (`http://hn.algolia.com/api/v1/search?query=${search}&tags=story`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.hits.length > 0) {
+        this.setState({news: data.hits})
+      } else {
+        this.setState("No results found. Please search again.")
+      }
+    })
+    .catch(error => console.log("Parsing failed: ", error))
+  }
 
-
-
-
+    fetchdate = (search) => {
+      fetch (`http://hn.algolia.com/api/v1/search?query=${search}&tags=story`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.hits.length > 0) {
+          this.setState({news: data.hits})
+        } else {
+          this.setState("No results found. Please search again.")
+        }
+      })
+      .catch(error => console.log("Parsing failed: ", error))
+    }
 
 
 
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          {/* they value of the input is tied to this.state.value so when a user types the handleChange method changes this.state.value to match*/}
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+      <div className= "body-container">
+      <div className="form-container">
+        <form>
+          <input
+            type= "text"
+            name='SearchAny'
+            placeholder="Search News"
+            value={this.state.SearchAny}
+            onChange={this.handleChange}
+          ></input>
+          <button onClick={this.handleSubmitsearch}>Search</button>
+        </form>
+        </div>
+        </div>
     );
   }
-}
-
+} 
+  
 
 export default App;
