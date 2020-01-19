@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 
@@ -11,7 +10,7 @@ class App extends React.Component {
     this.state = {
     news:[],
     SearchAny:"",
-    SearchDate: "",
+    SearchDates: "",
   }
 }
 
@@ -20,24 +19,24 @@ class App extends React.Component {
     this.setState({[e.target.name]: e.target.value})
   }
 
- handleSubmitsearch =(e) => {
+ handleSubmitSearch =(e) => {
     // always put this line in on submits, it prevents the page from reloading and wiping your state
     e.preventDefault();
-    this.fetchany(this.state.SearchAny)
+    this.fetchAny(this.state.SearchAny)
     // after doing something with the data we reset the form value to empty quotes again
     this.setState({value: ''})
   }
 
-  handleSubmitdate =(e) => {
+  handleSubmitDate =(e) => {
     // always put this line in on submits, it prevents the page from reloading and wiping your state
     e.preventDefault();
-    this.fetchdate(this.state.SearchDate)
+    this.fetchDate(this.state.SearchDates)
     // after doing something with the data we reset the form value to empty quotes again
     this.setState({value: ''})
   }
 
-  fetchany = (search) => {
-    fetch (`http://hn.algolia.com/api/v1/search?query=${search}&tags=story`)
+  fetchAny = () => {
+    fetch (`http://hn.algolia.com/api/v1/search?query=&tags=story`)
     .then(response => response.json())
     .then(data => {
       if (data.hits.length > 0) {
@@ -49,8 +48,8 @@ class App extends React.Component {
     .catch(error => console.log("Parsing failed: ", error))
   }
 
-    fetchdate = (search) => {
-      fetch (`http://hn.algolia.com/api/v1/search?query=${search}&tags=story`)
+    fetchAuthor = () => {
+      fetch (`http://hn.algolia.com/api/v1/search_by_date?query=$tags=story`)
       .then(response => response.json())
       .then(data => {
         if (data.hits.length > 0) {
@@ -65,25 +64,45 @@ class App extends React.Component {
 
 
 
-  render() {
-    return (
-      <div className= "body-container">
-      <div className="form-container">
-        <form>
-          <input
-            type= "text"
-            name='SearchAny'
-            placeholder="Search News"
-            value={this.state.SearchAny}
-            onChange={this.handleChange}
-          ></input>
-          <button onClick={this.handleSubmitsearch}>Search</button>
-        </form>
+    render() {
+      return (
+        <div className= "body-container">
+        <div className="form-container">
+          <form>
+            <input
+              type= "text"
+              name='SearchAny'
+              placeholder="Search News"
+              value={this.state.SearchAny}
+              onChange={this.handleChange}
+            ></input>
+            <button onClick={this.handleSubmitSearch}>Search</button>
+          </form>
+          <form>
+            <input
+            type = 'text'
+            name= 'SearchDates'
+            placeholder="Search by Dates"
+            value={this.state.SearchDates}
+            onChange={this.handleChange}></input>
+            <button onclick={this.handleSubmitDate}>Search</button>
+          </form>
+          </div>
+          <div className="results-show">
+          {this.state.news.map ((news, index) => (
+            <div>
+              <div key={index}>
+                <p><a href={news.url}>{news.title}</a> by {news.dates}</p>
+                <p>Published: {news.created_at}</p>
+              </div>
+            </div>
+          ))}
         </div>
-        </div>
-    );
+          </div>
+      );
+          }
   }
-} 
+    
   
 
 export default App;
