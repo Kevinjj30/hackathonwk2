@@ -68,7 +68,7 @@ class App extends React.Component {
 
     render() {
       return (
-        <div className= "bodypage">
+        <div className= "bodypaget">
         <div className="formbox">
           <form>
             <input
