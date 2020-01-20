@@ -93,7 +93,7 @@ class App extends React.Component {
           <div className="resultsdisplay">
           {this.state.news.map ((news, index) => (
             <div>
-              <div key={index+1}>
+              <div key={index}>
                 <p><a href={news.url}>{news.title}</a></p>
                 <p>{news.story_text}</p>
                 <p>Published: {news.created_at}</p>
