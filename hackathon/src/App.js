@@ -43,12 +43,12 @@ class App extends React.Component {
       if (data.hits.length > 0) {
         this.setState({news: data.hits})
       } else {
-        this.setState("No results found. Please search again.")
+        this.setState("No results found")
       }
     })
     .catch(error => console.log("Parsing failed: ", error))
   }
-// I saw a video on setting up my fetches this syntax was a little different for my beer app but this works well with less lines.
+// I saw a video on setting up my fetches this syntax was a little different from my beer app but this works well with less lines.
 
     fetchDates = (search) => {
       fetch (`http://hn.algolia.com/api/v1/search_by_date?query=${search}&tags=story`)
@@ -57,7 +57,7 @@ class App extends React.Component {
         if (data.hits.length > 0) {
           this.setState({news: data.hits})
         } else {
-          this.setState("No results found. Please search again.")
+          this.setState("No results found")
         }
       })
       .catch(error => console.log("Parsing failed: ", error))
@@ -68,8 +68,8 @@ class App extends React.Component {
 
     render() {
       return (
-        <div className= "body-container">
-        <div className="form-container">
+        <div className= "bodypage">
+        <div className="formbox">
           <form>
             <input
               type= "text"
@@ -90,7 +90,7 @@ class App extends React.Component {
             <button onClick={this.handleSubmitDate}>Search</button>
           </form>
           </div>
-          <div className="results-show">
+          <div className="resultsdisplay">
           {this.state.news.map ((news, index) => (
             <div>
               <div key={index+1}>
